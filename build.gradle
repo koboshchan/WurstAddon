@@ -42,10 +42,34 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    
-    // Resolve Wurst7 dependency from either submodule or sibling checkout.
-    def wurstJar = findWurstJar()
-    modImplementation files(wurstJar)
+
+    // Skip Wurst jar lookup when only running tasks in the included wurst7-base build.
+    if (!isWurstBaseOnlyInvocation()) {
+        // Resolve Wurst7 dependency from either submodule or sibling checkout.
+        def wurstJar = findWurstJar()
+        modImplementation files(wurstJar)
+    }
+}
+
+def isWurstBaseOnlyInvocation() {
+    def requestedTasks = []
+    requestedTasks.addAll(gradle.startParameter.taskNames ?: [])
+
+    for (def request : gradle.startParameter.taskRequests ?: []) {
+        requestedTasks.addAll(request.args ?: [])
+    }
+
+    requestedTasks = requestedTasks.findAll { taskName ->
+        return taskName != null && !taskName.isBlank() && !taskName.startsWith("-")
+    }
+
+    if (requestedTasks.isEmpty())
+        return false
+
+    return requestedTasks.every { taskName ->
+        return taskName == "wurst7-base" || taskName == ":wurst7-base" ||
+            taskName.startsWith("wurst7-base:") || taskName.startsWith(":wurst7-base:")
+    }
 }
 
 def findWurstJar() {
