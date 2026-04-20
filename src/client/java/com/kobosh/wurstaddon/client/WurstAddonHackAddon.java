@@ -11,7 +11,7 @@ import com.kobosh.wurstaddon.client.hack.ExampleHack;
 public class WurstAddonHackAddon implements Addon {
 
     private final Hack[] hacks = {
-        new ExampleHack()
+            new ExampleHack()
     };
 
     @Override
@@ -29,4 +29,3 @@ public class WurstAddonHackAddon implements Addon {
         return new Command[0];
     }
 }
-
