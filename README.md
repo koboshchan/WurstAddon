@@ -1,63 +1,45 @@
-# WurstAddon - Hack System
+# WurstAddon
 
 ## Overview
-This addon provides a simple hack system for WurstAddon. Hacks are features that can be enabled/disabled dynamically.
 
-## ExampleHack
+This project is a Wurst7 addon for Minecraft 1.21.1.
 
-The **ExampleHack** is a simple demonstration hack that:
-- Sends "hello world" in chat when enabled
-- Automatically disables itself after sending the message
+It uses Java ServiceLoader to register an addon provider that contributes hacks
+to Wurst at startup.
 
-## How to Enable Hacks
+## Current Example
 
-### Option 1: Enable on Client Start
-Edit [WurstaddonClient.java](../WurstaddonClient.java) and uncomment the line:
-```java
-HackManager.enableHack("Example Hack");
-```
+`ExampleHack` demonstrates a minimal hack:
 
-### Option 2: Using HackManager Programmatically
-```java
-HackManager.enableHack("Example Hack");
-```
+- Sends "hello world" when enabled.
+- Disables itself immediately after running.
 
-### Option 3: Add a Command (Future Enhancement)
-You can create a command to enable/disable hacks at runtime.
+## How Addon Registration Works
 
-## Creating Your Own Hack
+1. Provider class: `WurstAddonHackAddon` implements `net.wurstclient.addon.Addon`.
+2. Service file: `src/client/resources/META-INF/services/net.wurstclient.addon.Addon`.
+3. Service file content points to the provider class.
 
-1. Create a new class that extends `Hack`:
-```java
-public class MyHack extends Hack {
-    public MyHack() {
-        super("My Hack", "Description of my hack");
-    }
+No manual registration in `WurstaddonClient` is required.
 
-    @Override
-    protected void onEnable() {
-        // Code to run when hack is enabled
-    }
+## Build Requirements
 
-    @Override
-    protected void onDisable() {
-        // Code to run when hack is disabled
-    }
+1. Build Wurst first, either in:
 
-    @Override
-    public void onTick() {
-        // Called every tick while enabled (optional)
-    }
-}
-```
+   - `wurst7-base`, or
+   - `../Wurst7`
 
-2. Register your hack in `WurstaddonClient.onInitializeClient()`:
-```java
-HackManager.registerHack(new MyHack());
-```
+2. Build this addon:
 
-## Files
+   - `./gradlew build`
 
-- **Hack.java** - Base class for all hacks
-- **ExampleHack.java** - Example implementation
-- **HackManager.java** - Manages hack registration and lifecycle
+`build.gradle` automatically resolves the newest matching Wurst jar from those
+two locations.
+
+## Validation
+
+When Wurst starts, verify a log line similar to:
+
+- `[Wurst] Loaded addon: WurstAddon (...)`
+
+Then confirm `Example Hack` appears in the Wurst hack list and can be toggled.

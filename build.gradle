@@ -43,8 +43,31 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     
-    // Wurst7 dependency from local build (wurst7-base submodule)
-    modImplementation files("wurst7-base/build/libs/Wurst-Client-v7.51.2-MC1.21.1.jar")
+    // Resolve Wurst7 dependency from either submodule or sibling checkout.
+    def wurstJar = findWurstJar()
+    modImplementation files(wurstJar)
+}
+
+def findWurstJar() {
+    def candidateDirs = [
+        file("wurst7-base/build/libs"),
+        file("../Wurst7/build/libs")
+    ]
+
+    for (def dir : candidateDirs) {
+        if (!dir.exists())
+            continue
+
+        def jars = dir.listFiles()?.findAll {
+            return it.name.endsWith(".jar") && !it.name.endsWith("-sources.jar") && !it.name.endsWith("-dev.jar") && !it.name.endsWith("-javadoc.jar") && (it.name.contains("Wurst") || it.name.contains("wurst"))
+        }?.sort { a, b -> b.lastModified() <=> a.lastModified() }
+
+        if (jars && !jars.isEmpty())
+            return jars.first().absolutePath
+    }
+
+    throw new GradleException(
+        "Could not find a built Wurst7 jar. Build Wurst first in wurst7-base or ../Wurst7.")
 }
 
 processResources {

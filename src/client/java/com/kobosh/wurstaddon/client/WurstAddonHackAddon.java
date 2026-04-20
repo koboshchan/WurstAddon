@@ -1,13 +1,14 @@
 package com.kobosh.wurstaddon.client;
 
-import net.wurstclient.addon.HackAddon;
+import net.wurstclient.addon.Addon;
+import net.wurstclient.command.Command;
 import net.wurstclient.hack.Hack;
 import com.kobosh.wurstaddon.client.hack.ExampleHack;
 
 /**
- * WurstAddon HackAddon implementation for registering hacks with Wurst7
+ * WurstAddon provider for registering hacks and commands with Wurst7.
  */
-public class WurstAddonHackAddon implements HackAddon {
+public class WurstAddonHackAddon implements Addon {
 
     private final Hack[] hacks = {
         new ExampleHack()
@@ -21,6 +22,11 @@ public class WurstAddonHackAddon implements HackAddon {
     @Override
     public Hack[] getHacks() {
         return hacks;
+    }
+
+    @Override
+    public Command[] getCommands() {
+        return new Command[0];
     }
 }
 
