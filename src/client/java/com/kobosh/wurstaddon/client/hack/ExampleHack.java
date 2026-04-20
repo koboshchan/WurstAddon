@@ -1,18 +1,19 @@
 package com.kobosh.wurstaddon.client.hack;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 import net.wurstclient.Category;
 import net.wurstclient.hack.Hack;
 import net.wurstclient.util.ChatUtils;
+import net.wurstclient.SearchTags;
 
 /**
  * Example hack that sends a message in chat and then disables itself
  */
+
+ @SearchTags({"example"})
 public class ExampleHack extends Hack {
 
     public ExampleHack() {
-        super("Example Hack");
+        super("ExampleHack");
         setCategory(Category.FUN);
     }
 
