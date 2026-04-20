@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.wurstclient.Category;
 import net.wurstclient.hack.Hack;
+import net.wurstclient.util.ChatUtils;
 
 /**
  * Example hack that sends a message in chat and then disables itself
@@ -17,11 +18,7 @@ public class ExampleHack extends Hack {
 
     @Override
     protected void onEnable() {
-        // Send message in chat
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player != null) {
-            client.player.sendMessage(Text.of("hello world"), false);
-        }
+        ChatUtils.message("Example Hack enabled! This message will be sent once.");
 
         // Disable the hack after sending the message
         setEnabled(false);
