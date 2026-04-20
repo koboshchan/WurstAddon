@@ -1,37 +1,33 @@
 # WurstAddon - Hack System
 
 ## Overview
-This addon provides a simple hack system for WurstAddon. Hacks are features that can be enabled/disabled dynamically.
+This addon integrates with Wurst7's hack system using the HackAddon interface and Java's ServiceLoader.
 
 ## ExampleHack
 
 The **ExampleHack** is a simple demonstration hack that:
+- Extends `net.wurstclient.hack.Hack` (from Wurst7)
 - Sends "hello world" in chat when enabled
 - Automatically disables itself after sending the message
+- Shows up in the Wurst7 hack menu under the "Fun" category
 
-## How to Enable Hacks
+## How Hacks Are Registered
 
-### Option 1: Enable on Client Start
-Edit [WurstaddonClient.java](../WurstaddonClient.java) and uncomment the line:
-```java
-HackManager.enableHack("Example Hack");
-```
-
-### Option 2: Using HackManager Programmatically
-```java
-HackManager.enableHack("Example Hack");
-```
-
-### Option 3: Add a Command (Future Enhancement)
-You can create a command to enable/disable hacks at runtime.
+1. **HackAddon Implementation** - `WurstAddonHackAddon.java` implements the `HackAddon` interface and provides all hacks
+2. **ServiceLoader** - The file `META-INF/services/net.wurstclient.addon.HackAddon` registers the addon with Wurst7
+3. **Automatic Discovery** - When Wurst7 loads, it uses Java's ServiceLoader to discover and load all registered addons
 
 ## Creating Your Own Hack
 
-1. Create a new class that extends `Hack`:
+1. Create a new class that extends `net.wurstclient.hack.Hack`:
 ```java
+import net.wurstclient.Category;
+import net.wurstclient.hack.Hack;
+
 public class MyHack extends Hack {
     public MyHack() {
-        super("My Hack", "Description of my hack");
+        super("My Hack");
+        setCategory(Category.FUN);  // Or other category
     }
 
     @Override
@@ -46,18 +42,39 @@ public class MyHack extends Hack {
 
     @Override
     public void onTick() {
-        // Called every tick while enabled (optional)
+        // Optional: Called every tick while enabled
     }
 }
 ```
 
-2. Register your hack in `WurstaddonClient.onInitializeClient()`:
+2. Add your hack to `WurstAddonHackAddon.java`:
 ```java
-HackManager.registerHack(new MyHack());
+private final Hack[] hacks = {
+    new ExampleHack(),
+    new MyHack()  // Add your hack here
+};
 ```
+
+## Available Categories
+
+- `Category.BLOCKS`
+- `Category.MOVEMENT`
+- `Category.COMBAT`
+- `Category.RENDER`
+- `Category.CHAT`
+- `Category.FUN`
+- `Category.ITEMS`
+- `Category.OTHER`
+
+## Dependencies
+
+This addon depends on:
+- Wurst7 (for the hack framework)
+- Fabric API (for basic fabric mod functionality)
 
 ## Files
 
-- **Hack.java** - Base class for all hacks
-- **ExampleHack.java** - Example implementation
-- **HackManager.java** - Manages hack registration and lifecycle
+- **ExampleHack.java** - Example hack implementation
+- **WurstAddonHackAddon.java** - HackAddon provider
+- **META-INF/services/net.wurstclient.addon.HackAddon** - ServiceLoader configuration
+

@@ -1,0 +1,61 @@
+name: Build WurstAddon
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        fetch-depth: 0
+
+    - name: Checkout Wurst7 correct branch
+      run: |
+        cd wurst7-base
+        git fetch origin
+        git checkout 1.21.1
+        cd ..
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Build Wurst7 (submodule)
+      run: |
+        cd wurst7-base
+        chmod +x gradlew
+        ./gradlew build -x test
+        cd ..
+
+    - name: Build WurstAddon
+      run: |
+        chmod +x gradlew
+        ./gradlew build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: WurstAddon-build
+        path: |
+          build/libs/WurstAddon-*.jar
+          wurst7-base/build/libs/Wurst-Client-*.jar
+        retention-days: 30
+
+    - name: Create Release (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          build/libs/WurstAddon-*.jar
+          wurst7-base/build/libs/Wurst-Client-*.jar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

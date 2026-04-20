@@ -2,6 +2,8 @@ package com.kobosh.wurstaddon.client.hack;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.wurstclient.Category;
+import net.wurstclient.hack.Hack;
 
 /**
  * Example hack that sends a message in chat and then disables itself
@@ -9,7 +11,8 @@ import net.minecraft.text.Text;
 public class ExampleHack extends Hack {
 
     public ExampleHack() {
-        super("Example Hack", "A simple example hack that sends hello world in chat");
+        super("Example Hack");
+        setCategory(Category.FUN);
     }
 
     @Override

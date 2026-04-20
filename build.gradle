@@ -42,6 +42,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    
+    // Wurst7 dependency from local build (wurst7-base submodule)
+    modImplementation files("wurst7-base/build/libs/Wurst-Client-v7.51.2-MC1.21.1.jar")
 }
 
 processResources {

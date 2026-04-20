@@ -1,0 +1,3 @@
+[submodule "wurst7-base"]
+	path = wurst7-base
+	url = https://github.com/koboshchan/Wurst7.git
