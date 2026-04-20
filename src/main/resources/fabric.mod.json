@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "wurstaddon",
+  "version": "${version}",
+  "name": "WurstAddon",
+  "description": "addon for wurst client",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/wurstaddon/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "com.kobosh.wurstaddon.client.WurstaddonDataGenerator"
+    ],
+    "client": [
+      "com.kobosh.wurstaddon.client.WurstaddonClient"
+    ],
+    "main": [
+      "com.kobosh.wurstaddon.Wurstaddon"
+    ]
+  },
+  "mixins": [
+    "wurstaddon.mixins.json",
+    {
+      "config": "wurstaddon.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
