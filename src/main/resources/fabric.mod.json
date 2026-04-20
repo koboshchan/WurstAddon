@@ -32,5 +32,13 @@
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "wurst": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "wurst",
+      "links": {
+        "modmenu.twitter": "https://x.com/kobosh_com/"
+      }
+    }
   }
 }
