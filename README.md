@@ -29,6 +29,10 @@ No manual registration in `WurstaddonClient` is required.
    - `wurst7-base`, or
    - `../Wurst7`
 
+requires koboshchan/Wurst7 for add on support
+
+current supported branches are `master` and `1.21.1`
+
 2. Build this addon:
 
    - `./gradlew build`
